@@ -10,55 +10,63 @@ const shadow = 'black';
 const dieColor = 'blue';
 
 export default StyleSheet.create({
-    container: {
-    },
     bottomContainer: {
         flex: 1,
         justifyContent: 'flex-end',
     },
-    diceField: {
+    buttons: {
+        flexDirection: 'row'
+    },
+    centeredView: {
+        alignItems: 'center',
         flex: 1,
+        justifyContent: 'center',
+        marginTop: 22
+    },
+    container: {
+    },
+    diceField: {
+        alignItems: 'flex-start',
         backgroundColor: background,
+        flex: 1,
         flexDirection: 'row'
     },
     die: {
-        borderRadius: size(5),
-        backgroundColor: dieColor,
-        width: size(50),
-        height: size(50),
         alignItems: 'center',
+        backgroundColor: dieColor,
+        borderRadius: size(5),
+        height: size(50),
         justifyContent: 'center',
         margin: size(3),
+        width: size(50),
     },
-    text: {
-        fontSize,
-        color: background
-    },
-    centeredView: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 22
+    input: {
+        borderWidth: 1,
+        height: 40,
+        margin: 12,
+        padding: 10,
     },
     modalView: {
-        margin: 20,
+        alignItems: 'center',
         backgroundColor: background,
         borderRadius: 20,
+        elevation: 5,
+        height: 'auto',
+        margin: 20,
         padding: 25,
-        alignItems: 'center',
         shadowColor: shadow,
         shadowOffset: {
             width: 0,
             height: 2
         },
         shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
+        shadowRadius: 4
     },
-    input: {
-        height: 40,
-        margin: 12,
-        borderWidth: 1,
-        padding: 10,
+    scroll: {
+        flexGrow: 0
     },
+    text: {
+        color: background,
+        fontSize
+    }
 });

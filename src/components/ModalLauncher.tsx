@@ -1,15 +1,34 @@
-import { View, Modal, Pressable } from 'react-native';
-import { useState, ReactNode } from 'react';
+import { View, Modal, TouchableOpacity } from 'react-native';
+import { useState, ComponentType } from 'react';
 import styles from '../styles';
 
-type ModalLauncherProps = {
-    modal: (closeSelf: ()=>void) => ReactNode,
-    children: ReactNode
+type Location = {
+    x: number,
+    y: number
+};
+
+export type ModalLauncherProps = {
+    openModel(touchLocation?: Location): void
 }
 
-const ModalLauncher = ({modal, children}: ModalLauncherProps ) => {
+export type ModalProps = {
+    closeModal(): void,
+    pressLocation: Location
+}
+
+type ModalWrapperProps<LP, MP> = {
+    LauncherComponent: ComponentType<LP & ModalLauncherProps>, launcherProps: LP, ModalComponent: ComponentType<MP & ModalProps>, modalProps: MP, closeOnTouchOutside?: boolean
+}
+
+function ModalWrapper<LP, MP>({ LauncherComponent, launcherProps, ModalComponent, modalProps, closeOnTouchOutside = false }: ModalWrapperProps<LP, MP>) {
     const [modalVisible, setModalVisible] = useState(false);
-    const closeSelf = () => setModalVisible(false);
+    const [pressLocation, setPressLocation] = useState({ x: 0, y: 0 });
+    const openModal = (touchLocation = pressLocation) => {
+        setModalVisible(true);
+        setPressLocation(touchLocation);
+    };
+    const closeModal = () => setModalVisible(false);
+
     return (
         <>
             <Modal
@@ -20,17 +39,15 @@ const ModalLauncher = ({modal, children}: ModalLauncherProps ) => {
                     setModalVisible(!modalVisible);
                 }}
             >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        {modal(closeSelf)}
-                    </View>
+                <View style={styles.centeredView} onStartShouldSetResponder={() => closeOnTouchOutside} onResponderRelease={closeModal}>
+                    <TouchableOpacity activeOpacity={1}>
+                        <ModalComponent closeModal={closeModal} pressLocation={pressLocation} {...modalProps} />
+                    </TouchableOpacity>
                 </View>
             </Modal>
-            <Pressable onPress={() => setModalVisible(true)}>
-                {children}
-            </Pressable>
+            <LauncherComponent openModel={openModal} {...launcherProps} />
         </>
     );
-};
+}
 
-export default ModalLauncher;
+export default ModalWrapper;
