@@ -1,13 +1,29 @@
-import { Die } from './Die';
-import { Text } from 'react-native';
-import { PropsWithChildren } from 'react';
+import { Die } from "./Die";
+import { FlatList, View } from "react-native";
+import DieMenuEntry, { DieMenuEntryType } from "./DieMenuEntry";
 
-type DieMenuProps = PropsWithChildren<{
-    die: Die
-}>
+type DieMenuProps = {
+    die: Die,
+    updateDie(die: Die): void,
+    close(): void,
+}
 
-const DieMenu = ({die, children}: DieMenuProps) => {
-    return (<Text />);
+    
+const DieMenu = ({ die, updateDie, close }: DieMenuProps) => {
+    const ENTRIES: DieMenuEntryType[] = [
+        { text: "Edit", func: () => {close();} }
+    ]
+        ;
+    
+
+    return (
+        <View>
+            <FlatList
+                data={ENTRIES}
+                renderItem={DieMenuEntry}
+            />
+        </View>
+    );
 };
 
 export default DieMenu;

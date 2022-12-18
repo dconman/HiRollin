@@ -1,9 +1,11 @@
-import DiceField from './src/components/DiceField';
+import DiceField from "./src/components/DiceField";
 
-export default function App() {
+const App = () => {
     return (
         <DiceField />
     );
-}
+};
+
+export default App;
 
 
