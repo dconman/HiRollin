@@ -1,12 +1,13 @@
-import { Button, ScrollView } from 'react-native';
-import type { FC } from 'react';
-import { useCallback, useState } from 'react';
+import ButtonsRow from './ButtonsRow';
+import EditDieFace from './EditDieFace';
+import { numberify } from '../helpers/TypeUtils';
 import { v4 as uuidV4 } from '../helpers/uuid';
 import styles from '../styles';
+import { useCallback, useState } from 'react';
+import { Button, ScrollView } from 'react-native';
+
 import type { Die } from '../types';
-import ButtonsRow from './ButtonsRow';
-import { numberify } from '../helpers/TypeUtils';
-import EditDieFace from './EditDieFace';
+import type { FC } from 'react';
 
 interface EditDieProps {
   readonly die: Die;

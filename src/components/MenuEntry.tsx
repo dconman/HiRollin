@@ -1,6 +1,7 @@
-import type { FC } from 'react';
-import { TouchableHighlight, Text } from 'react-native';
 import styles, { colors } from '../styles';
+import { TouchableHighlight, Text } from 'react-native';
+
+import type { FC } from 'react';
 
 export interface MenuEntryType {
   readonly text: string;

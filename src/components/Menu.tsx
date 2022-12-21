@@ -1,6 +1,7 @@
-import { FlatList, View } from 'react-native';
-import type { MenuEntryType } from './MenuEntry';
 import MenuEntry from './MenuEntry';
+import { FlatList, View } from 'react-native';
+
+import type { MenuEntryType } from './MenuEntry';
 
 interface MenuProps {
   readonly data: readonly MenuEntryType[];

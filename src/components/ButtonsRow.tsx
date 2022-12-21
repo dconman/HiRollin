@@ -1,6 +1,7 @@
-import type { FC } from 'react';
-import { Button, View } from 'react-native';
 import styles from '../styles';
+import { Button, View } from 'react-native';
+
+import type { FC } from 'react';
 
 interface ButtonsRowProps {
   readonly submitAction: () => void;

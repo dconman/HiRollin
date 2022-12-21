@@ -1,11 +1,9 @@
-import DiceField from "./src/components/DiceField";
+import DiceField from './src/components/DiceField';
 
-const App = () => {
-    return (
-        <DiceField />
-    );
-};
+import type { FC } from 'react';
+
+const App: FC<never> = () => (
+  <DiceField />
+);
 
 export default App;
-
-

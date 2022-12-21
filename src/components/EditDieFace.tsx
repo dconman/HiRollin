@@ -1,7 +1,8 @@
-import type { FC } from 'react';
+import styles from '../styles';
 import { useCallback } from 'react';
 import { Button, TextInput, View } from 'react-native';
-import styles from '../styles';
+
+import type { FC } from 'react';
 
 interface EditDieFaceProps {
   readonly deleteFace: (key: string) => void;

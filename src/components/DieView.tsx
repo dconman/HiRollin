@@ -1,12 +1,13 @@
-import type { FC } from 'react';
-import { useCallback } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
-import styles from '../styles';
 import EditDie from './EditDie';
 import Menu from './Menu';
-import type { MenuEntryType } from './MenuEntry';
 import usePopover from '../helpers/usePopover';
+import styles from '../styles';
+import { useCallback } from 'react';
+import { Text, TouchableOpacity } from 'react-native';
+
 import type { Die } from '../types';
+import type { MenuEntryType } from './MenuEntry';
+import type { FC } from 'react';
 
 interface DieViewProps {
   readonly die: Die;

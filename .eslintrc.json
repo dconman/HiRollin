@@ -14,8 +14,7 @@
         "airbnb",
         "airbnb-typescript"
     ],
-    "overrides": [
-    ],
+    "overrides": [],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -23,7 +22,7 @@
         "ecmaFeatures": {
             "jsx": true
         },
-        "project": "./tsconfig.eslint.json"
+        "project": "./tsconfig.json"
     },
     "plugins": [
         "react",
@@ -46,19 +45,64 @@
             "error",
             120
         ],
-        "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
+        "import/order": [
+            "error",
+            {
+                "groups": [
+                    "index",
+                    "sibling",
+                    "parent",
+                    "internal",
+                    "external",
+                    "builtin",
+                    "object",
+                    "type"
+                ],
+                "alphabetize": {
+                    "order": "asc"
+                }
+            }
+        ],
+        "react/jsx-filename-extension": [
+            "error",
+            {
+                "extensions": [
+                    ".tsx"
+                ]
+            }
+        ],
         "react/react-in-jsx-scope": "off",
-        "react/function-component-definition": ["error", {
-            "namedComponents": "arrow-function",
-            "unnamedComponents": "arrow-function"
-        }],
+        "react/function-component-definition": [
+            "error",
+            {
+                "namedComponents": "arrow-function",
+                "unnamedComponents": "arrow-function"
+            }
+        ],
         "react/forbid-component-props": "off",
-        "react/require-default-props": ["error", {
-            "forbidDefaultForRequired": true,
-            "functions": "defaultArguments"
-        }],
-        "react/jsx-max-props-per-line": ["error", { "maximum": { "single": 3, "multi": 1 } }],
-        "react/jsx-newline": ["error", { "prevent": true, "allowMultilines": true }],
+        "react/require-default-props": [
+            "error",
+            {
+                "forbidDefaultForRequired": true,
+                "functions": "defaultArguments"
+            }
+        ],
+        "react/jsx-max-props-per-line": [
+            "error",
+            {
+                "maximum": {
+                    "single": 3,
+                    "multi": 1
+                }
+            }
+        ],
+        "react/jsx-newline": [
+            "error",
+            {
+                "prevent": true,
+                "allowMultilines": true
+            }
+        ],
         "react/jsx-handler-names": "off",
         "import/extensions": "off"
     },

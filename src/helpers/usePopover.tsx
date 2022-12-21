@@ -1,8 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading -- Ignored in higher order components */
-import { useCallback, useState } from 'react';
-import type { PublicPopoverProps } from 'react-native-popover-view/dist/Popover';
-import Popover from 'react-native-popover-view/dist/Popover';
 import { functionify } from './TypeUtils';
+import { useCallback, useState } from 'react';
+import Popover from 'react-native-popover-view/dist/Popover';
+
+import type { PublicPopoverProps } from 'react-native-popover-view/dist/Popover';
 
 export default function usePopover(initial = false): {
   // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types -- externally defined type
