@@ -1,11 +1,11 @@
 import { TouchableHighlight, Text } from "react-native";
 import styles, { colors } from "../styles";
 
-export type DieMenuEntryType = {
+export type MenuEntryType = {
     text: string, func(): void
 }
 
-const DieMenuEntry = ({ item: { text, func } }: { item: DieMenuEntryType }) => (
+const MenuEntry = ({ item: { text, func } }: { item: MenuEntryType }) => (
     <TouchableHighlight
         onPress={func}
         style={styles.popoverMenuItem}
@@ -17,4 +17,4 @@ const DieMenuEntry = ({ item: { text, func } }: { item: DieMenuEntryType }) => (
     </TouchableHighlight>
 );
 
-export default DieMenuEntry;
+export default MenuEntry;

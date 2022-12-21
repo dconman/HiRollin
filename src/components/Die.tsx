@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useCallback } from "react";
 import { Text, TouchableOpacity } from "react-native";
-import Popover from "react-native-popover-view/dist/Popover";
-import useToggle from "../helpers/useToggle";
 import styles from "../styles";
-import DieMenu from "./DieMenu";
+import DieFaceSelector from "./DieFaceSelector";
+import Menu from "./Menu";
+import { MenuEntryType } from "./MenuEntry";
+import usePopover from "../helpers/usePopover";
 
-export type DieFace = string | number
+export type DieFace = {value: string | number, key: string}
 export type Die = {
     name: string,
+    key: string,
     faces: DieFace[]
 }
 
@@ -18,37 +20,34 @@ type DieProps = {
 }
 
 const Die = ({ die, upFace, updateDie }: DieProps) => {
-    const [menuShown, showMenu, hideMenu] = useToggle(false);
-    const [showEdit, setShowEdit] = useState(false);
-    //define menu options here
+    const menu = usePopover();
+    const edit = usePopover();
+    const ENTRIES: MenuEntryType[] = [
+        { text: "Roll", func: menu.hidePopover },
+        { text: "Set", func: menu.showPopover },
+        { text: "Edit", func: useCallback(
+            () =>  menu.hidePopover(edit.showPopover),
+            [menu.hidePopover, edit.showPopover])
+        },
+        { text: "Duplicate", func: menu.hidePopover },
+        { text: "Delete", func: menu.hidePopover },
+    ];
+
+    const dieView = (
+        <TouchableOpacity onPress={menu.showPopover} style={styles.die}>
+            <Text adjustsFontSizeToFit numberOfLines={1} style={styles.dieText} >
+                {die.faces[upFace]?.value}
+            </Text>
+        </TouchableOpacity>
+    );
+
     return (
         <>
-            <Popover
-                from={
-                    <TouchableOpacity
-                        onPress={showMenu}
-                        style={styles.die}
-                    >
-                        <Text
-                            adjustsFontSizeToFit
-                            numberOfLines={1}
-                            style={styles.dieText}
-                        >
-                            {die.faces[upFace]}
-                        </Text>
-                    </TouchableOpacity>
-                }
-                isVisible={menuShown}
-            >
-                <DieMenu
-                    close={hideMenu}
-                    die={die}
-                    updateDie={updateDie}
-                />
+            {menu.renderPopover({from: dieView, children: (<Menu data={ENTRIES} />), onRequestClose: menu.hidePopover})}
 
-            </Popover>
-
-            {/* <Popover>launch edit die</Popover> */}
+            {edit.renderPopover({
+                children: (<DieFaceSelector close={edit.hidePopover} die={die} updateDie={updateDie} />)
+            })}
         </>
     );
 };

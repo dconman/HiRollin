@@ -46,6 +46,10 @@ module.exports = {
         "eol-last": [
             "error"
         ],
+        "max-len": [
+            "error",
+            120
+        ],
         "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] }],
         "react/function-component-definition": ["error", {
             "namedComponents": "arrow-function",
@@ -55,7 +59,10 @@ module.exports = {
         "react/require-default-props": ["error", {
             "forbidDefaultForRequired": true,
             "functions": "defaultArguments"
-        }]
+        }],
+        "react/jsx-max-props-per-line": ["error", { "maximum": { "single": 3, "multi": 1 } }],
+        "react/jsx-newline": ["error", { "prevent": true, "allowMultilines": true }],
+        "react/jsx-handler-names": "off"
     },
     "settings": {
         "react": {

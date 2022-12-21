@@ -8,15 +8,8 @@ type ButtonsProps = {
 
 const Buttons = ({submitAction, cancelAction}: ButtonsProps) =>(
     <View style={styles.buttons}>
-        <Button
-            onPress={cancelAction}
-            title='Cancel'
-        />
-
-        <Button
-            onPress={submitAction}
-            title='Submit'
-        />
+        <Button onPress={cancelAction} title='Cancel' />
+        <Button onPress={submitAction} title='Submit' />
     </View>
 );
 
