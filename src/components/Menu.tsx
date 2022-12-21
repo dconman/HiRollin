@@ -1,18 +1,15 @@
-import { FlatList, View } from "react-native";
-import MenuEntry, { MenuEntryType } from "./MenuEntry";
+import { FlatList, View } from 'react-native';
+import type { MenuEntryType } from './MenuEntry';
+import MenuEntry from './MenuEntry';
 
-type MenuProps = {
-    data: MenuEntryType[]
+interface MenuProps {
+  readonly data: readonly MenuEntryType[];
 }
 
-    
-const Menu = ({ data }: MenuProps) => {
-
-    return (
-        <View>
-            <FlatList data={data} renderItem={MenuEntry} />
-        </View>
-    );
-};
+const Menu = ({ data }: MenuProps): JSX.Element => (
+  <View>
+    <FlatList data={data} renderItem={MenuEntry} />
+  </View>
+);
 
 export default Menu;
