@@ -2,20 +2,24 @@ import styles from '../styles';
 import { useCallback } from 'react';
 import { Button, TextInput, View } from 'react-native';
 
+import type { DieFace } from '../types';
 import type { FC } from 'react';
 
 interface EditDieFaceProps {
   readonly deleteFace: (key: string) => void;
   readonly faceKey: string;
   readonly value: string;
-  readonly updateFace: (key: string, value: string) => void;
+  readonly updateFace: (newFace: DieFace) => void;
 }
 
 const EditDieFace: FC<EditDieFaceProps> = ({
   deleteFace, faceKey, value, updateFace,
 }) => {
   const deleteByKey = useCallback(() => { deleteFace(faceKey); }, [faceKey, deleteFace]);
-  const updateByKey = useCallback((newValue: string) => { updateFace(faceKey, newValue); }, [faceKey, updateFace]);
+  const updateByKey = useCallback(
+    (newValue: string) => { updateFace({ key: faceKey, value: newValue }); },
+    [faceKey, updateFace],
+  );
   return (
     <View style={styles.editDieFaceRow}>
       <Button onPress={deleteByKey} title="X" />

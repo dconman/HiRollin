@@ -14,6 +14,7 @@
         "airbnb",
         "airbnb-typescript"
     ],
+    "ignorePatterns": ["babel.config.js"],
     "overrides": [],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -104,7 +105,10 @@
             }
         ],
         "react/jsx-handler-names": "off",
-        "import/extensions": "off"
+        "import/extensions": "off",
+        "react-hooks/exhaustive-deps": ["error", {
+            "additionalHooks": "useCallbackIgnoreEvent"
+          }]
     },
     "settings": {
         "react": {

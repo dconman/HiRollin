@@ -18,15 +18,15 @@ interface DieViewProps {
 const DieView: FC<DieViewProps> = ({ die, upFace, updateDie }) => {
   const menu = usePopover();
   const edit = usePopover();
-  const [hideMenuAnd, showEdit] = [menu.hidePopoverAnd, edit.showPopover];
+  const [hideMenu, showEdit] = [menu.hidePopover, edit.showPopover];
   const ENTRIES: MenuEntryType[] = [
     { text: 'Roll', func: menu.hidePopover },
     { text: 'Set', func: menu.showPopover },
     {
       text: 'Edit',
       func: useCallback(
-        () => { hideMenuAnd(showEdit); },
-        [hideMenuAnd, showEdit],
+        () => { hideMenu(showEdit); },
+        [hideMenu, showEdit],
       ),
     },
     { text: 'Duplicate', func: menu.hidePopover },
