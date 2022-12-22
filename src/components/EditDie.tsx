@@ -1,5 +1,6 @@
 import ButtonsRow from './ButtonsRow';
 import EditDieFace from './EditDieFace';
+import useCallbackWithArgs from '../helpers/useCallbackWithArgs';
 import useKeyedList from '../helpers/useKeyedList';
 import styles from '../styles';
 import { useCallback } from 'react';
@@ -15,7 +16,8 @@ interface EditDieProps {
 }
 
 const EditDie: FC<EditDieProps> = ({ die, updateDie, close }: EditDieProps) => {
-  const [faceList, updateFace, addFace, deleteFace] = useKeyedList(die.faces, { value: '' });
+  const [faceList, updateFace, addFace, deleteFace] = useKeyedList(die.faces);
+  const addEmptyFace = useCallbackWithArgs(addFace, { value: '' });
 
   const submit = useCallback(() => {
     const updatedDie = { ...die, faces: faceList };
@@ -34,7 +36,7 @@ const EditDie: FC<EditDieProps> = ({ die, updateDie, close }: EditDieProps) => {
         />
       ))}
 
-      <Button onPress={addFace} title="Add Face" />
+      <Button onPress={addEmptyFace} title="Add Face" />
 
       <ButtonsRow
         cancelAction={close}

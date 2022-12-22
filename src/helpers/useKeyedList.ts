@@ -1,14 +1,12 @@
-import useCallbackIgnoreEvent from './useCallbackIgnoreEvent';
+import { v4 as uuidV4 } from './uuid';
 import { useCallback, useState } from 'react';
-import { v4 as uuidV4 } from 'uuid';
-import type { IgnoreEvents } from './useCallbackIgnoreEvent';
 
 const useKeyedList = <T extends { readonly key: string }>(
-  initialKeyedList: readonly T[], defaultValue: Omit<T, 'key'> | T,
+  initialKeyedList: readonly T[],
 ): [
     readonly T[],
     (entry: T) => void,
-    IgnoreEvents<(newEntry?: Omit<T, 'key'> | T) => void>,
+    (newEntry: Omit<T, 'key'> | T) => void,
     (deleteKey: string) => void] => {
   const [keyedList, setKeyedList] = useState(initialKeyedList);
   const updateEntry = useCallback((entry: T) => {
@@ -19,12 +17,12 @@ const useKeyedList = <T extends { readonly key: string }>(
       return newEntries;
     });
   }, []);
-  const addEntry = useCallbackIgnoreEvent((newEntry: Omit<T, 'key'> | T = defaultValue) => {
+  const addEntry = useCallback((newEntry: Omit<T, 'key'> | T) => {
     setKeyedList((currentList) => {
       const newEntries = [...currentList, { ...newEntry, key: uuidV4() } as T];
       return newEntries;
     });
-  }, [defaultValue]);
+  }, []);
   const deleteEntry = useCallback((deleteKey: string) => {
     setKeyedList((currentList) => {
       const index = currentList.findIndex(({ key }) => key === deleteKey);

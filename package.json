@@ -19,6 +19,7 @@
     "react-native-get-random-values": "^1.8.0",
     "react-native-popover-view": "^5.1.7",
     "react-native-web": "~0.18.7",
+    "type-fest": "^3.4.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

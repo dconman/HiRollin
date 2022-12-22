@@ -1,5 +1,6 @@
 import EditDie from './EditDie';
 import Menu from './Menu';
+import useCallbackWithArgs from '../helpers/useCallbackWithArgs';
 import usePopover from '../helpers/usePopover';
 import styles from '../styles';
 import { useCallback } from 'react';
@@ -18,7 +19,9 @@ interface DieViewProps {
 const DieView: FC<DieViewProps> = ({ die, upFace, updateDie }) => {
   const menu = usePopover();
   const edit = usePopover();
-  const [hideMenu, showEdit] = [menu.hidePopover, edit.showPopover];
+  const showMenu = useCallbackWithArgs(menu.showPopover);
+  const hideMenu = menu.hidePopover;
+  const showEdit = edit.showPopover;
   const ENTRIES: MenuEntryType[] = [
     { text: 'Roll', func: menu.hidePopover },
     { text: 'Set', func: menu.showPopover },
@@ -34,7 +37,7 @@ const DieView: FC<DieViewProps> = ({ die, upFace, updateDie }) => {
   ];
 
   const dieView = (
-    <TouchableOpacity onPress={menu.showPopover} style={styles.die}>
+    <TouchableOpacity onPress={showMenu} style={styles.die}>
       <Text adjustsFontSizeToFit numberOfLines={1} style={styles.dieText}>
         {die.faces[upFace]?.value}
       </Text>
