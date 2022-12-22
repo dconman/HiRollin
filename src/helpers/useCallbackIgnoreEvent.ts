@@ -7,9 +7,9 @@ function isNativeEvent<T>(params: readonly unknown[]): params is [NativeSyntheti
   return !!(typeof params[0] === 'object' && params[0] && ('nativeEvent' in params[0]));
 }
 
-export type IgnoreEvents<T> = T | [Readonly<NativeSyntheticEvent<unknown>>]
+export type IgnoreEvents<T extends (...args: any) => any> = (...args: Parameters<T> | [NativeSyntheticEvent<unknown>]) => ReturnType<T>
 
-const useCallbackIgnoreEvent = <T extends unknown[], R> (callback: (...params: Partial<T>) => R, dependencies: DependencyList):((...params: IgnoreEvents<Partial<T>>) => R) => useCallback((...params) => {
+const useCallbackIgnoreEvent = <T extends unknown[], R> (callback: (...params: Partial<T>) => R, dependencies: DependencyList):(IgnoreEvents<(...params: Partial<T>) => R>) => useCallback((...params) => {
   if (isNativeEvent(params)) { return (callback as (() => R))(); }
   return callback(...params);
 }, dependencies);

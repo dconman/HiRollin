@@ -2,7 +2,7 @@ import ButtonsRow from './ButtonsRow';
 import EditDieFace from './EditDieFace';
 import useKeyedList from '../helpers/useKeyedList';
 import styles from '../styles';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Button, ScrollView } from 'react-native';
 
 import type { Die } from '../types';
@@ -16,12 +16,12 @@ interface EditDieProps {
 
 const EditDie: FC<EditDieProps> = ({ die, updateDie, close }: EditDieProps) => {
   const [faceList, updateFace, addFace, deleteFace] = useKeyedList(die.faces, { value: '' });
-  const [updatedDie, setUpdatedDie] = useState(die);
 
   const submit = useCallback(() => {
+    const updatedDie = { ...die, faces: faceList };
     updateDie(updatedDie);
     close();
-  }, [updateDie, updatedDie, close]);
+  }, [updateDie, die, faceList, close]);
   return (
     <ScrollView style={styles.scroll}>
       {faceList.map((face) => (

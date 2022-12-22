@@ -10,8 +10,8 @@ export default function usePopover(initial = false): {
   // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types -- externally defined type
   readonly renderPopover: (props: Readonly<PublicPopoverProps>) => JSX.Element;
   readonly visible: boolean;
-  readonly showPopover: (callback?: (() => void)) => void;
-  readonly hidePopover: (...params: IgnoreEvents<[callback?: (() => void)]>) => void;
+  readonly showPopover: IgnoreEvents<(callback?: (() => void)) => void>;
+  readonly hidePopover: IgnoreEvents<(callback?: (() => void)) => void>;
 } {
   const [popover, setPopover] = useState(
     { visible: initial } as { visible: boolean; handleClose?: () => void; handleOpen?: () => void },

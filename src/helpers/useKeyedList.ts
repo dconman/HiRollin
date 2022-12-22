@@ -8,7 +8,7 @@ const useKeyedList = <T extends { readonly key: string }>(
 ): [
     readonly T[],
     (entry: T) => void,
-    (...params: IgnoreEvents<[newEntry?: Omit<T, 'key'> | T]>) => void,
+    IgnoreEvents<(newEntry?: Omit<T, 'key'> | T) => void>,
     (deleteKey: string) => void] => {
   const [keyedList, setKeyedList] = useState(initialKeyedList);
   const updateEntry = useCallback((entry: T) => {
