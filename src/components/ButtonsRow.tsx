@@ -1,11 +1,11 @@
 import styles from '../styles';
 import { Button, View } from 'react-native';
 
-import type { FC } from 'react';
+import type { ComponentPropsWithoutRef, FC } from 'react';
 
 interface ButtonsRowProps {
-  readonly submitAction: () => void;
-  readonly cancelAction: () => void;
+  readonly submitAction: NonNullable<ComponentPropsWithoutRef<typeof Button>['onPress']>;
+  readonly cancelAction: NonNullable<ComponentPropsWithoutRef<typeof Button>['onPress']>;
 }
 
 const ButtonsRow: FC<ButtonsRowProps> = ({ submitAction, cancelAction }) => (

@@ -20,7 +20,7 @@ const DieView: FC<DieViewProps> = ({ die, upFace, updateDie }) => {
   const menu = usePopover();
   const edit = usePopover();
   const showMenu = useCallbackWithArgs(menu.showPopover);
-  const hideMenu = menu.hidePopover;
+  const hideMenuAnd = menu.hidePopoverAnd;
   const showEdit = edit.showPopover;
   const ENTRIES: MenuEntryType[] = [
     { text: 'Roll', func: menu.hidePopover },
@@ -28,8 +28,8 @@ const DieView: FC<DieViewProps> = ({ die, upFace, updateDie }) => {
     {
       text: 'Edit',
       func: useCallback(
-        () => { hideMenu(showEdit); },
-        [hideMenu, showEdit],
+        () => { hideMenuAnd(showEdit); },
+        [hideMenuAnd, showEdit],
       ),
     },
     { text: 'Duplicate', func: menu.hidePopover },

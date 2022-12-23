@@ -2,28 +2,49 @@ import { useCallback, useState } from 'react';
 import Popover from 'react-native-popover-view/dist/Popover';
 import type { ComponentPropsWithoutRef } from 'react';
 
-export default function usePopover(initial = false): {
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types -- imported type
-  readonly renderPopover: (props: ComponentPropsWithoutRef<typeof Popover>) => JSX.Element;
+interface PopoverState {
   readonly visible: boolean;
-  readonly showPopover: (callback?: (() => void)) => void;
-  readonly hidePopover: (callback?: (() => void)) => void;
-} {
+  readonly handleClose?: () => void;
+  readonly handleOpen?: () => void;
+}
+
+interface UsePopoverReturn {
+  readonly renderPopover: (
+    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types -- inferred type for forwarding
+    props: ComponentPropsWithoutRef<typeof Popover>,
+  ) => JSX.Element;
+  readonly visible: boolean;
+  readonly showPopover: () => void;
+  readonly hidePopover: () => void;
+  readonly showPopoverAnd: (callback: () => void) => void;
+  readonly hidePopoverAnd: (callback: () => void) => void;
+}
+
+export default function usePopover(initial = false): UsePopoverReturn {
   const [popover, setPopover] = useState(
-    { visible: initial } as { visible: boolean; handleClose?: () => void; handleOpen?: () => void },
+    { visible: initial } as PopoverState,
   );
 
-  const hidePopover = useCallback(
-    (callback?: (() => void)) => { setPopover({ visible: false, handleClose: callback }); },
-    [],
-  );
+  const hidePopover = useCallback(() => {
+    setPopover({ visible: false });
+  }, []);
 
-  const showPopover = useCallback((callback?: (() => void)) => {
+  const hidePopoverAnd = useCallback((callback: () => void) => {
+    setPopover({ visible: false, handleClose: callback });
+  }, []);
+
+  const showPopover = useCallback(() => {
+    setPopover({ visible: true });
+  }, []);
+
+  const showPopoverAnd = useCallback((callback: () => void) => {
     setPopover({ visible: true, handleOpen: callback });
   }, []);
 
-  // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types
-  const renderPopover = (props: ComponentPropsWithoutRef<typeof Popover>): JSX.Element => (
+  const renderPopover = (
+    // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types -- inferred type for forwarding
+    props: ComponentPropsWithoutRef<typeof Popover>,
+  ): JSX.Element => (
     <Popover
       // eslint-disable-next-line react/jsx-props-no-spreading -- forwarding props to third party
       {...props}
@@ -34,6 +55,6 @@ export default function usePopover(initial = false): {
   );
 
   return {
-    renderPopover, visible: popover.visible, showPopover, hidePopover,
+    renderPopover, visible: popover.visible, showPopover, hidePopover, showPopoverAnd, hidePopoverAnd,
   };
 }

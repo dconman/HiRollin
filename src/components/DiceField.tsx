@@ -9,7 +9,7 @@ import type { FC } from 'react';
 
 const roll = (die: Die): number => Math.floor(Math.random() * die.faces.length);
 
-const DiceField: FC<Record<string, never>> = () => {
+const DiceField: FC = () => {
   const [dice, setDice] = useState(seedDice);
   const [values, setValues] = useState(() => Array(dice.length).fill(0) as readonly number[]);
   const updateDieCurried = (index: number) => (newDie: Die) => {
