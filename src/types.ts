@@ -1,6 +1,6 @@
-export interface DieFace { readonly value: number | string; readonly key: string }
+export interface DieFace { readonly key: string; readonly value: number | string }
 export interface Die {
-  readonly name: string;
-  readonly key: string;
   readonly faces: readonly DieFace[];
+  readonly key: string;
+  readonly name: string;
 }

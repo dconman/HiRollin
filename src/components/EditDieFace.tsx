@@ -8,8 +8,8 @@ import type { FC } from 'react';
 interface EditDieFaceProps {
   readonly deleteFace: (key: string) => void;
   readonly faceKey: string;
-  readonly value: string;
   readonly updateFace: (newFace: DieFace) => void;
+  readonly value: string;
 }
 
 const EditDieFace: FC<EditDieFaceProps> = ({

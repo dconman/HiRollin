@@ -5,17 +5,20 @@ import useKeyedList from '../helpers/useKeyedList';
 import styles from '../styles';
 import { useCallback } from 'react';
 import { Button, ScrollView } from 'react-native';
+import { v4 as uuidV4 } from 'uuid';
 
 import type { Die } from '../types';
 import type { FC } from 'react';
 
 interface EditDieProps {
-  readonly die: Die;
-  readonly updateDie: (die: Die) => void;
   readonly close: () => void;
+  readonly die?: Die;
+  readonly updateDie: (die: Die) => void;
 }
 
-const EditDie: FC<EditDieProps> = ({ die, updateDie, close }: EditDieProps) => {
+const EditDieModal: FC<EditDieProps> = ({
+  die = { faces: [], key: uuidV4(), name: '' }, updateDie, close,
+}: EditDieProps) => {
   const [faceList, updateFace, addFace, deleteFace] = useKeyedList(die.faces);
   const addEmptyFace = useCallbackWithArgs(addFace, { value: '' });
 
@@ -46,4 +49,4 @@ const EditDie: FC<EditDieProps> = ({ die, updateDie, close }: EditDieProps) => {
   );
 };
 
-export default EditDie;
+export default EditDieModal;

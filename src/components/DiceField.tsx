@@ -1,5 +1,8 @@
 import DieView from './DieView';
+import EditDieModal from './EditDieModal';
 import seedDice from '../assets/seedDice';
+import useKeyedList from '../helpers/useKeyedList';
+import usePopover from '../helpers/usePopover';
 import styles from '../styles';
 import { useCallback, useState } from 'react';
 import { View, Button, StatusBar } from 'react-native';
@@ -10,15 +13,18 @@ import type { FC } from 'react';
 const roll = (die: Die): number => Math.floor(Math.random() * die.faces.length);
 
 const DiceField: FC = () => {
-  const [dice, setDice] = useState(seedDice);
+  const [dice, updateDie, addDie, deleteDie] = useKeyedList(seedDice);
+  const edit = usePopover();
   const [values, setValues] = useState(() => Array(dice.length).fill(0) as readonly number[]);
-  const updateDieCurried = (index: number) => (newDie: Die) => {
-    const newDice = [...dice];
-    newDice[index] = newDie;
-    setDice(newDice);
-  };
+  // TODO, value needs to be moved or somehow kept in sync with dice
+  const addDieAndInsertBlank = useCallback((newEntry: Die | Omit<Die, 'key'>) => {
+    addDie(newEntry);
+    setValues((currentList) => [...currentList, 0]);
+  }, [addDie]);
 
-  const handleRoll = useCallback(() => { setValues(dice.map(roll)); }, [dice, setValues]);
+  const handleRoll = useCallback(() => {
+    setValues(dice.map(roll));
+  }, [dice, setValues]);
 
   return (
     <>
@@ -26,9 +32,10 @@ const DiceField: FC = () => {
         {dice.map((die, index) => (
           <DieView
             die={die}
-            key={die.name}
+            key={die.key}
             upFace={values[index]}
-            updateDie={updateDieCurried(index)}
+            updateDie={updateDie}
+            deleteDie={deleteDie}
           />
         ))}
 
@@ -36,6 +43,8 @@ const DiceField: FC = () => {
       </View>
 
       <View style={styles.bottomContainer}>
+        { edit.renderPopover({ children: <EditDieModal close={edit.hidePopover} updateDie={addDieAndInsertBlank} /> })}
+        <Button onPress={edit.showPopover} title="Add Die" />
         <Button onPress={handleRoll} title="Roll" />
       </View>
     </>

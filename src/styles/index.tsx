@@ -1,15 +1,21 @@
-import { StyleSheet, PixelRatio } from 'react-native';
+import { StyleSheet, PixelRatio, Dimensions } from 'react-native';
 
 const fontSize = 24 * PixelRatio.getFontScale();
-function size(inSize: number): number {
-  return PixelRatio.get() * inSize;
+
+const MIN_DIE_SIZE = fontSize * 5;
+
+export function dieSize(): number {
+  const windowWidth = Dimensions.get('window').width;
+  const numAcross = Math.floor(windowWidth / MIN_DIE_SIZE);
+  const width = windowWidth / numAcross;
+  return width - 6;
 }
 
 export const colors = {
   background: 'white',
-  textColor: 'black',
-  shadow: 'black',
   dieColor: 'blue',
+  shadow: 'black',
+  textColor: 'black',
   underlay: 'grey',
 };
 
@@ -32,18 +38,19 @@ export default StyleSheet.create({
   diceField: {
     alignItems: 'flex-start',
     backgroundColor: colors.background,
-    flex: 1,
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: 'auto',
   },
   die: {
     alignItems: 'center',
+    aspectRatio: 1,
     backgroundColor: colors.dieColor,
-    borderRadius: size(5),
+    borderRadius: 10,
     fontSize: fontSize * 2,
-    height: size(50),
     justifyContent: 'center',
-    margin: size(3),
-    width: size(50),
+    margin: 6,
+    width: dieSize(),
   },
   dieText: {
     color: colors.background,
@@ -61,6 +68,9 @@ export default StyleSheet.create({
     margin: 12,
     padding: 10,
   },
+  menu: {
+    width: 100,
+  },
   modalView: {
     alignItems: 'center',
     backgroundColor: colors.background,
@@ -71,14 +81,11 @@ export default StyleSheet.create({
     padding: 25,
     shadowColor: colors.shadow,
     shadowOffset: {
-      width: 0,
       height: 2,
+      width: 0,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-  },
-  popoverMenuItem: {
-    padding: size(5),
   },
   scroll: {
     flexGrow: 0,

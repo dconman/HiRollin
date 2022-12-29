@@ -1,9 +1,8 @@
-import EditDie from './EditDie';
+import EditDieModal from './EditDieModal';
 import Menu from './Menu';
 import useCallbackWithArgs from '../helpers/useCallbackWithArgs';
 import usePopover from '../helpers/usePopover';
 import styles from '../styles';
-import { useCallback } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 
 import type { Die } from '../types';
@@ -11,29 +10,28 @@ import type { MenuEntryType } from './MenuEntry';
 import type { FC } from 'react';
 
 interface DieViewProps {
+  readonly deleteDie: (deleteKey: string) => void;
   readonly die: Die;
   readonly upFace: number;
   readonly updateDie: (die: Die) => void;
 }
 
-const DieView: FC<DieViewProps> = ({ die, upFace, updateDie }) => {
+const DieView: FC<DieViewProps> = ({
+  die, deleteDie, upFace, updateDie,
+}) => {
   const menu = usePopover();
   const edit = usePopover();
   const showMenu = useCallbackWithArgs(menu.showPopover);
-  const hideMenuAnd = menu.hidePopoverAnd;
-  const showEdit = edit.showPopover;
+  const deleteThisDie = useCallbackWithArgs(deleteDie, die.key);
   const ENTRIES: MenuEntryType[] = [
-    { text: 'Roll', func: menu.hidePopover },
-    { text: 'Set', func: menu.showPopover },
+    { func: menu.hidePopover, text: 'Roll' },
+    { func: menu.showPopover, text: 'Set' },
     {
+      func: useCallbackWithArgs(menu.hidePopoverAnd, edit.showPopover),
       text: 'Edit',
-      func: useCallback(
-        () => { hideMenuAnd(showEdit); },
-        [hideMenuAnd, showEdit],
-      ),
     },
-    { text: 'Duplicate', func: menu.hidePopover },
-    { text: 'Delete', func: menu.hidePopover },
+    { func: menu.hidePopover, text: 'Duplicate' },
+    { func: useCallbackWithArgs(menu.hidePopoverAnd, deleteThisDie), text: 'Delete' },
   ];
 
   const dieView = (
@@ -46,10 +44,12 @@ const DieView: FC<DieViewProps> = ({ die, upFace, updateDie }) => {
 
   return (
     <>
-      {menu.renderPopover({ from: dieView, children: (<Menu data={ENTRIES} />), onRequestClose: menu.hidePopover })}
+      {menu.renderPopover({
+        children: (<Menu data={ENTRIES} />), from: dieView, onRequestClose: menu.hidePopover,
+      })}
 
       {edit.renderPopover({
-        children: (<EditDie close={edit.hidePopover} die={die} updateDie={updateDie} />),
+        children: (<EditDieModal close={edit.hidePopover} die={die} updateDie={updateDie} />),
       })}
     </>
   );

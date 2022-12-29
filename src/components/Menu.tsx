@@ -1,4 +1,5 @@
 import MenuEntry from './MenuEntry';
+import styles from '../styles';
 import { FlatList, View } from 'react-native';
 
 import type { MenuEntryType } from './MenuEntry';
@@ -10,7 +11,7 @@ interface MenuProps {
 
 const Menu: FC<MenuProps> = ({ data }) => (
   <View>
-    <FlatList data={data} renderItem={MenuEntry} />
+    <FlatList contentContainerStyle={styles.menu} data={data} renderItem={MenuEntry} />
   </View>
 );
 

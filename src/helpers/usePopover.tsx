@@ -3,21 +3,21 @@ import Popover from 'react-native-popover-view/dist/Popover';
 import type { ComponentPropsWithoutRef } from 'react';
 
 interface PopoverState {
-  readonly visible: boolean;
   readonly handleClose?: () => void;
   readonly handleOpen?: () => void;
+  readonly visible: boolean;
 }
 
 interface UsePopoverReturn {
+  readonly hidePopover: () => void;
+  readonly hidePopoverAnd: (callback: () => void) => void;
   readonly renderPopover: (
     // eslint-disable-next-line @typescript-eslint/prefer-readonly-parameter-types -- inferred type for forwarding
     props: ComponentPropsWithoutRef<typeof Popover>,
   ) => JSX.Element;
-  readonly visible: boolean;
   readonly showPopover: () => void;
-  readonly hidePopover: () => void;
   readonly showPopoverAnd: (callback: () => void) => void;
-  readonly hidePopoverAnd: (callback: () => void) => void;
+  readonly visible: boolean;
 }
 
 export default function usePopover(initial = false): UsePopoverReturn {
@@ -30,7 +30,7 @@ export default function usePopover(initial = false): UsePopoverReturn {
   }, []);
 
   const hidePopoverAnd = useCallback((callback: () => void) => {
-    setPopover({ visible: false, handleClose: callback });
+    setPopover({ handleClose: callback, visible: false });
   }, []);
 
   const showPopover = useCallback(() => {
@@ -38,7 +38,7 @@ export default function usePopover(initial = false): UsePopoverReturn {
   }, []);
 
   const showPopoverAnd = useCallback((callback: () => void) => {
-    setPopover({ visible: true, handleOpen: callback });
+    setPopover({ handleOpen: callback, visible: true });
   }, []);
 
   const renderPopover = (
@@ -55,6 +55,6 @@ export default function usePopover(initial = false): UsePopoverReturn {
   );
 
   return {
-    renderPopover, visible: popover.visible, showPopover, hidePopover, showPopoverAnd, hidePopoverAnd,
+    hidePopover, hidePopoverAnd, renderPopover, showPopover, showPopoverAnd, visible: popover.visible,
   };
 }

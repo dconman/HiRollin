@@ -28,7 +28,8 @@
     "plugins": [
         "react",
         "react-native",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "typescript-sort-keys"
     ],
     "rules": {
         "linebreak-style": [
@@ -106,7 +107,10 @@
         ],
         "react/jsx-handler-names": "off",
         "import/extensions": "off",
-        "react-hooks/exhaustive-deps": ["error"]
+        "react-hooks/exhaustive-deps": ["error"],
+        "sort-keys": ["error", "asc", {"caseSensitive": true, "natural": false, "minKeys": 2}],
+        "typescript-sort-keys/interface": ["error", "asc", {"caseSensitive": true, "natural": false}],
+        "typescript-sort-keys/string-enum": ["error", "asc", {"caseSensitive": true}]
     },
     "settings": {
         "react": {

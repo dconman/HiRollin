@@ -2,7 +2,7 @@ import { v4 as uuidV4 } from './uuid';
 import { useCallback, useState } from 'react';
 
 const useKeyedList = <T extends { readonly key: string }>(
-  initialKeyedList: readonly T[],
+  initialKeyedList: readonly T[] | (() => readonly T[]),
 ): [
     readonly T[],
     (entry: T) => void,
