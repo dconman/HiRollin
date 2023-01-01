@@ -1,4 +1,4 @@
-import { v4 as uuidV4 } from './uuid';
+import uuid from './uuid';
 import { useCallback, useState } from 'react';
 
 const useKeyedList = <T extends { readonly key: string }>(
@@ -19,7 +19,7 @@ const useKeyedList = <T extends { readonly key: string }>(
   }, []);
   const addEntry = useCallback((newEntry: Omit<T, 'key'> | T) => {
     setKeyedList((currentList) => {
-      const newEntries = [...currentList, { ...newEntry, key: uuidV4() } as T];
+      const newEntries = [...currentList, { ...newEntry, key: uuid() } as T];
       return newEntries;
     });
   }, []);

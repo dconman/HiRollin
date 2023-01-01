@@ -3,33 +3,45 @@ import EditDieFace from './EditDieFace';
 import useCallbackWithArgs from '../helpers/useCallbackWithArgs';
 import useKeyedList from '../helpers/useKeyedList';
 import styles from '../styles';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Button, ScrollView } from 'react-native';
-import { v4 as uuidV4 } from 'uuid';
 
 import type { Die } from '../types';
 import type { FC } from 'react';
 
 interface EditDieProps {
   readonly close: () => void;
-  readonly die?: Die;
-  readonly updateDie: (die: Die) => void;
+  readonly die: Die;
+  readonly saveDie: (die: EditDieProps['die']) => void;
 }
 
-const EditDieModal: FC<EditDieProps> = ({
-  die = { faces: [], key: uuidV4(), name: '' }, updateDie, close,
-}: EditDieProps) => {
-  const [faceList, updateFace, addFace, deleteFace] = useKeyedList(die.faces);
+interface NewDieProps {
+  readonly close: () => void;
+  readonly die?: Omit<Die, 'key' >;
+  readonly saveDie: (die: Die | Omit<Die, 'key'>) => void;
+}
+
+const EditDieModal: FC<EditDieProps | NewDieProps> = ({
+  die = { faces: [], name: '', upface: 0 }, saveDie, close,
+}: EditDieProps | NewDieProps) => {
+  const [faces, updateFace, addFace, deleteFace] = useKeyedList(die.faces);
   const addEmptyFace = useCallbackWithArgs(addFace, { value: '' });
 
   const submit = useCallback(() => {
-    const updatedDie = { ...die, faces: faceList };
-    updateDie(updatedDie);
+    const upface = Math.min(die.upface, faces.length - 1);
+    // TS isn't smart enough to know that this is enforced by the type constraint
+    // destructuring a union of objects doesn't understand the relation between the keys
+    (saveDie as (newDie: typeof die) => void)({ ...die, faces, upface });
     close();
-  }, [updateDie, die, faceList, close]);
+  }, [saveDie, die, faces, close]);
+
+  useEffect(() => {
+    if (faces.length === 0) addEmptyFace();
+  }, [faces, addEmptyFace]);
+
   return (
     <ScrollView style={styles.scroll}>
-      {faceList.map((face) => (
+      {faces.map((face) => (
         <EditDieFace
           deleteFace={deleteFace}
           faceKey={face.key}

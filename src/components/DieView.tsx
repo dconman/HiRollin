@@ -12,12 +12,11 @@ import type { FC } from 'react';
 interface DieViewProps {
   readonly deleteDie: (deleteKey: string) => void;
   readonly die: Die;
-  readonly upFace: number;
   readonly updateDie: (die: Die) => void;
 }
 
 const DieView: FC<DieViewProps> = ({
-  die, deleteDie, upFace, updateDie,
+  die, deleteDie, updateDie,
 }) => {
   const menu = usePopover();
   const edit = usePopover();
@@ -37,7 +36,7 @@ const DieView: FC<DieViewProps> = ({
   const dieView = (
     <TouchableOpacity onPress={showMenu} style={styles.die}>
       <Text adjustsFontSizeToFit numberOfLines={1} style={styles.dieText}>
-        {die.faces[upFace]?.value}
+        {die.faces[die.upface]?.value}
       </Text>
     </TouchableOpacity>
   );
@@ -49,7 +48,7 @@ const DieView: FC<DieViewProps> = ({
       })}
 
       {edit.renderPopover({
-        children: (<EditDieModal close={edit.hidePopover} die={die} updateDie={updateDie} />),
+        children: (<EditDieModal close={edit.hidePopover} die={die} saveDie={updateDie} />),
       })}
     </>
   );
