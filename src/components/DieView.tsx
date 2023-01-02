@@ -16,11 +16,13 @@ import type { FC } from 'react';
 interface DieViewProps {
   readonly deleteDie: (deleteKey: UUID) => void;
   readonly die: Die;
+  readonly duplicateDie: (die: Die) => void;
   readonly updateDie: (die: Die) => void;
+  readonly updateDieAndCopies: (die: Die) => void;
 }
 
 const DieView: FC<DieViewProps> = ({
-  die, deleteDie, updateDie,
+  die, deleteDie, duplicateDie, updateDie, updateDieAndCopies,
 }) => {
   const menu = usePopover();
   const edit = usePopover();
@@ -29,23 +31,26 @@ const DieView: FC<DieViewProps> = ({
   const rollThisDie = useCallback(() => {
     updateDie(rollDie(die));
   }, [die, updateDie]);
+  const duplicateThisDie = useCallbackWithArgs(duplicateDie, die);
   const hideMenuAndRoll = useCallbackWithArgs(menu.hidePopoverAnd, rollThisDie);
-  const hideMenuAndSet = useCallbackWithArgs(menu.hidePopoverAnd, edit.showPopover);
-  const hideMenuAndEdit = useCallbackWithArgs(menu.hidePopoverAnd, set.showPopover);
-  const ENTRIES: MenuEntryType[] = [
+  const hideMenuAndSet = useCallbackWithArgs(menu.hidePopoverAnd, set.showPopover);
+  const hideMenuAndEdit = useCallbackWithArgs(menu.hidePopoverAnd, edit.showPopover);
+  const hideMenuAndDuplicate = useCallbackWithArgs(menu.hidePopoverAnd, duplicateThisDie);
+  const entries: MenuEntryType[] = [
     {
       func: hideMenuAndRoll,
       text: 'Roll',
     },
     { func: hideMenuAndSet, text: 'Set' },
     { func: hideMenuAndEdit, text: 'Edit' },
-    { func: menu.hidePopover, text: 'Duplicate' },
     {
       // This causes an unhandled promise rejection warning sometimes. An issue with the library
       func: deleteThisDie,
       text: 'Delete',
     },
   ];
+
+  if (!die.copyOf) entries.push({ func: hideMenuAndDuplicate, text: 'Duplicate' });
 
   const dieView = (
     <TouchableOpacity onPress={menu.showPopover} style={styles.die}>
@@ -58,13 +63,13 @@ const DieView: FC<DieViewProps> = ({
   return (
     <>
       {menu.renderPopover({
-        children: (<Menu data={ENTRIES} />),
+        children: (<Menu data={entries} />),
         from: dieView,
         onRequestClose: menu.hidePopover,
       })}
 
       {edit.renderPopover({
-        children: (<EditDieModal close={edit.hidePopover} die={die} saveDie={updateDie} />),
+        children: (<EditDieModal close={edit.hidePopover} die={die} saveDie={updateDieAndCopies} />),
       })}
 
       {set.renderPopover({

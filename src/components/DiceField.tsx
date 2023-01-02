@@ -5,9 +5,12 @@ import useKeyedList from '../helpers/useKeyedList';
 import usePopover from '../helpers/usePopover';
 import { uuid2string } from '../helpers/uuid';
 import styles from '../styles';
-import { deserializeDie, rollDie } from '../types/Die';
+import {
+  copyableAttributes, deserializeDie, rollDie, modifyDie,
+} from '../types/Die';
 import { useCallback } from 'react';
 import { View, Button, StatusBar } from 'react-native';
+import type { UUID } from '../helpers/uuid';
 import type { Die } from '../types/Die';
 
 import type { FC } from 'react';
@@ -17,11 +20,23 @@ const DiceField: FC = () => {
   const edit = usePopover();
 
   const updateAll = useCallback((updatedDie: Die) => {
-    const { key: _key, copyOf: _copyOf, ...updates } = updatedDie;
+    const updates = copyableAttributes(updatedDie);
     dice.forEach((die) => {
-      if (updatedDie.key === die.key || updatedDie.key === die.copyOf) updateDie({ ...die, ...updates });
+      if (updatedDie.key !== die.key && updatedDie.key !== die.copyOf) return;
+      updateDie(modifyDie(updates, die));
     });
   }, [dice, updateDie]);
+
+  const deletedAll = useCallback((deleteKey: UUID) => {
+    dice.forEach((die) => {
+      if (deleteKey !== die.key && deleteKey !== die.copyOf) return;
+      deleteDie(die.key);
+    });
+  }, [dice, deleteDie]);
+
+  const duplicateDie = useCallback((die: Die) => {
+    addDie({ ...die, copyOf: die.key });
+  }, [addDie]);
 
   const handleRoll = useCallback(() => {
     dice.forEach((die) => {
@@ -35,9 +50,11 @@ const DiceField: FC = () => {
         {dice.map((die) => (
           <DieView
             die={die}
+            deleteDie={deletedAll}
+            duplicateDie={duplicateDie}
             key={uuid2string(die.key)}
-            updateDie={updateAll}
-            deleteDie={deleteDie}
+            updateDie={updateDie}
+            updateDieAndCopies={updateAll}
           />
         ))}
 

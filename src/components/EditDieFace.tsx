@@ -11,12 +11,13 @@ import type { FC } from 'react';
 interface EditDieFaceProps {
   readonly deleteFace: (key: UUID) => void;
   readonly faceKey: UUID;
+  readonly readonly?: boolean;
   readonly updateFace: (newFace: DieFace) => void;
   readonly value: string;
 }
 
 const EditDieFace: FC<EditDieFaceProps> = ({
-  deleteFace, faceKey, value, updateFace,
+  deleteFace, faceKey, readonly = false, value, updateFace,
 }) => {
   const deleteByKey = useCallback(() => { deleteFace(faceKey); }, [faceKey, deleteFace]);
   const updateByKey = useCallback(
@@ -28,6 +29,7 @@ const EditDieFace: FC<EditDieFaceProps> = ({
       <Button onPress={deleteByKey} title="X" />
 
       <TextInput
+        editable={!readonly}
         key={uuid2string(faceKey)}
         maxLength={6}
         onChangeText={updateByKey}
