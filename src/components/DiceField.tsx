@@ -4,17 +4,14 @@ import seedDice from '../assets/seedDice';
 import useKeyedList from '../helpers/useKeyedList';
 import usePopover from '../helpers/usePopover';
 import styles from '../styles';
+import { deserializeDie, rollDie } from '../types/Die';
 import { useCallback } from 'react';
 import { View, Button, StatusBar } from 'react-native';
 
-import type { Die, DieDefinition } from '../types';
 import type { FC } from 'react';
 
-const rollDie = (die: Die): Die => ({ ...die, upface: Math.floor(Math.random() * die.faces.length) });
-const deserialize = (die: DieDefinition): Die => ({ ...die, upface: 0 });
-
 const DiceField: FC = () => {
-  const [dice, updateDie, addDie, deleteDie] = useKeyedList(seedDice.map(deserialize));
+  const [dice, updateDie, addDie, deleteDie] = useKeyedList(seedDice.map(deserializeDie));
   const edit = usePopover();
 
   const handleRoll = useCallback(() => {

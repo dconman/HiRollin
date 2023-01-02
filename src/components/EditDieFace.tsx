@@ -1,8 +1,9 @@
+import { numberify } from '../helpers/TypeUtils';
 import styles from '../styles';
 import { useCallback } from 'react';
 import { Button, TextInput, View } from 'react-native';
 
-import type { DieFace } from '../types';
+import type { DieFace } from '../types/Die';
 import type { FC } from 'react';
 
 interface EditDieFaceProps {
@@ -17,7 +18,7 @@ const EditDieFace: FC<EditDieFaceProps> = ({
 }) => {
   const deleteByKey = useCallback(() => { deleteFace(faceKey); }, [faceKey, deleteFace]);
   const updateByKey = useCallback(
-    (newValue: string) => { updateFace({ key: faceKey, value: newValue }); },
+    (newValue: string) => { updateFace({ key: faceKey, value: numberify(newValue) ?? newValue }); },
     [faceKey, updateFace],
   );
   return (

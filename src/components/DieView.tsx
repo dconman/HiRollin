@@ -3,9 +3,11 @@ import Menu from './Menu';
 import useCallbackWithArgs from '../helpers/useCallbackWithArgs';
 import usePopover from '../helpers/usePopover';
 import styles from '../styles';
+import { rollDie } from '../types/Die';
+import { useCallback } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
+import type { Die } from '../types/Die';
 
-import type { Die } from '../types';
 import type { MenuEntryType } from './MenuEntry';
 import type { FC } from 'react';
 
@@ -20,13 +22,19 @@ const DieView: FC<DieViewProps> = ({
 }) => {
   const menu = usePopover();
   const edit = usePopover();
-  const showMenu = useCallbackWithArgs(menu.showPopover);
   const deleteThisDie = useCallbackWithArgs(deleteDie, die.key);
+  const rollThisDie = useCallback(() => {
+    updateDie(rollDie(die));
+  }, [die, updateDie]);
   const ENTRIES: MenuEntryType[] = [
-    { func: menu.hidePopover, text: 'Roll' },
+    {
+      func: useCallbackWithArgs(menu.hidePopoverAnd, rollThisDie),
+      text: 'Roll',
+    },
     { func: menu.showPopover, text: 'Set' },
     {
-      func: useCallbackWithArgs(menu.hidePopoverAnd, edit.showPopover),
+      // This causes an unhandled promise rejection warning sometimes. An issue with the library
+      func: deleteThisDie,
       text: 'Edit',
     },
     { func: menu.hidePopover, text: 'Duplicate' },
@@ -34,7 +42,7 @@ const DieView: FC<DieViewProps> = ({
   ];
 
   const dieView = (
-    <TouchableOpacity onPress={showMenu} style={styles.die}>
+    <TouchableOpacity onPress={menu.showPopover} style={styles.die}>
       <Text adjustsFontSizeToFit numberOfLines={1} style={styles.dieText}>
         {die.faces[die.upface]?.value}
       </Text>
@@ -44,7 +52,9 @@ const DieView: FC<DieViewProps> = ({
   return (
     <>
       {menu.renderPopover({
-        children: (<Menu data={ENTRIES} />), from: dieView, onRequestClose: menu.hidePopover,
+        children: (<Menu data={ENTRIES} />),
+        from: dieView,
+        onRequestClose: menu.hidePopover,
       })}
 
       {edit.renderPopover({

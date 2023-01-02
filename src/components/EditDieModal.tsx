@@ -6,7 +6,7 @@ import styles from '../styles';
 import { useCallback, useEffect } from 'react';
 import { Button, ScrollView } from 'react-native';
 
-import type { Die } from '../types';
+import type { Die } from '../types/Die';
 import type { FC } from 'react';
 
 interface EditDieProps {

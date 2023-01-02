@@ -5,15 +5,15 @@ const useKeyedList = <T extends { readonly key: string }>(
   initialKeyedList: readonly T[] | (() => readonly T[]),
 ): [
     readonly T[],
-    (entry: T) => void,
+    (updatedEntry: T) => void,
     (newEntry: Omit<T, 'key'> | T) => void,
     (deleteKey: string) => void] => {
   const [keyedList, setKeyedList] = useState(initialKeyedList);
-  const updateEntry = useCallback((entry: T) => {
+  const updateEntry = useCallback((updatedEntry: T) => {
     setKeyedList((currentList) => {
       const newEntries = [...currentList];
-      const index = newEntries.findIndex(({ key }) => key === entry.key);
-      newEntries[index] = entry;
+      const index = newEntries.findIndex(({ key }) => key === updatedEntry.key);
+      newEntries[index] = updatedEntry;
       return newEntries;
     });
   }, []);

@@ -1,4 +1,4 @@
-import type { DieDefinition } from '../types';
+import type { DieDefinition } from '../types/Die';
 
 export default [
   {
