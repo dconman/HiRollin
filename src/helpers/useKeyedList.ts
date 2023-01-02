@@ -1,13 +1,14 @@
 import uuid from './uuid';
 import { useCallback, useState } from 'react';
+import type { UUID } from './uuid';
 
-const useKeyedList = <T extends { readonly key: string }>(
+const useKeyedList = <T extends { readonly key: UUID }>(
   initialKeyedList: readonly T[] | (() => readonly T[]),
 ): [
     readonly T[],
     (updatedEntry: T) => void,
     (newEntry: Omit<T, 'key'> | T) => void,
-    (deleteKey: string) => void] => {
+    (deleteKey: UUID) => void] => {
   const [keyedList, setKeyedList] = useState(initialKeyedList);
   const updateEntry = useCallback((updatedEntry: T) => {
     setKeyedList((currentList) => {
@@ -23,7 +24,7 @@ const useKeyedList = <T extends { readonly key: string }>(
       return newEntries;
     });
   }, []);
-  const deleteEntry = useCallback((deleteKey: string) => {
+  const deleteEntry = useCallback((deleteKey: UUID) => {
     setKeyedList((currentList) => {
       const index = currentList.findIndex(({ key }) => key === deleteKey);
       const newEntries = [...currentList];

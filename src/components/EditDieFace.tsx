@@ -1,14 +1,16 @@
 import { numberify } from '../helpers/TypeUtils';
+import { uuid2string } from '../helpers/uuid';
 import styles from '../styles';
 import { useCallback } from 'react';
 import { Button, TextInput, View } from 'react-native';
+import type { UUID } from '../helpers/uuid';
 
 import type { DieFace } from '../types/Die';
 import type { FC } from 'react';
 
 interface EditDieFaceProps {
-  readonly deleteFace: (key: string) => void;
-  readonly faceKey: string;
+  readonly deleteFace: (key: UUID) => void;
+  readonly faceKey: UUID;
   readonly updateFace: (newFace: DieFace) => void;
   readonly value: string;
 }
@@ -26,7 +28,7 @@ const EditDieFace: FC<EditDieFaceProps> = ({
       <Button onPress={deleteByKey} title="X" />
 
       <TextInput
-        key={faceKey}
+        key={uuid2string(faceKey)}
         maxLength={6}
         onChangeText={updateByKey}
         style={styles.input}

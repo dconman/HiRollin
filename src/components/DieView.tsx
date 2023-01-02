@@ -1,18 +1,20 @@
 import EditDieModal from './EditDieModal';
 import Menu from './Menu';
+import SetDieModal from './SetDieModal';
 import useCallbackWithArgs from '../helpers/useCallbackWithArgs';
 import usePopover from '../helpers/usePopover';
 import styles from '../styles';
 import { rollDie } from '../types/Die';
 import { useCallback } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
+import type { UUID } from '../helpers/uuid';
 import type { Die } from '../types/Die';
 
 import type { MenuEntryType } from './MenuEntry';
 import type { FC } from 'react';
 
 interface DieViewProps {
-  readonly deleteDie: (deleteKey: string) => void;
+  readonly deleteDie: (deleteKey: UUID) => void;
   readonly die: Die;
   readonly updateDie: (die: Die) => void;
 }
@@ -22,23 +24,27 @@ const DieView: FC<DieViewProps> = ({
 }) => {
   const menu = usePopover();
   const edit = usePopover();
+  const set = usePopover();
   const deleteThisDie = useCallbackWithArgs(deleteDie, die.key);
   const rollThisDie = useCallback(() => {
     updateDie(rollDie(die));
   }, [die, updateDie]);
+  const hideMenuAndRoll = useCallbackWithArgs(menu.hidePopoverAnd, rollThisDie);
+  const hideMenuAndSet = useCallbackWithArgs(menu.hidePopoverAnd, edit.showPopover);
+  const hideMenuAndEdit = useCallbackWithArgs(menu.hidePopoverAnd, set.showPopover);
   const ENTRIES: MenuEntryType[] = [
     {
-      func: useCallbackWithArgs(menu.hidePopoverAnd, rollThisDie),
+      func: hideMenuAndRoll,
       text: 'Roll',
     },
-    { func: menu.showPopover, text: 'Set' },
+    { func: hideMenuAndSet, text: 'Set' },
+    { func: hideMenuAndEdit, text: 'Edit' },
+    { func: menu.hidePopover, text: 'Duplicate' },
     {
       // This causes an unhandled promise rejection warning sometimes. An issue with the library
       func: deleteThisDie,
-      text: 'Edit',
+      text: 'Delete',
     },
-    { func: menu.hidePopover, text: 'Duplicate' },
-    { func: useCallbackWithArgs(menu.hidePopoverAnd, deleteThisDie), text: 'Delete' },
   ];
 
   const dieView = (
@@ -59,6 +65,10 @@ const DieView: FC<DieViewProps> = ({
 
       {edit.renderPopover({
         children: (<EditDieModal close={edit.hidePopover} die={die} saveDie={updateDie} />),
+      })}
+
+      {set.renderPopover({
+        children: (<SetDieModal close={set.hidePopover} die={die} saveDie={updateDie} />),
       })}
     </>
   );

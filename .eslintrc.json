@@ -110,7 +110,16 @@
         "react-hooks/exhaustive-deps": ["error"],
         "sort-keys": ["error", "asc", {"caseSensitive": true, "natural": false, "minKeys": 2}],
         "typescript-sort-keys/interface": ["error", "asc", {"caseSensitive": true, "natural": false}],
-        "typescript-sort-keys/string-enum": ["error", "asc", {"caseSensitive": true}]
+        "typescript-sort-keys/string-enum": ["error", "asc", {"caseSensitive": true}],
+        "@typescript-eslint/naming-convention": [
+            "error",
+            {
+              "selector": "variableLike",
+              "modifiers": ["unused"],
+              "format": ["camelCase"],
+              "leadingUnderscore": "require"
+            }
+          ]
     },
     "settings": {
         "react": {

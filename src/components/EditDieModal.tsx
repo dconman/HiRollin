@@ -2,6 +2,7 @@ import ButtonsRow from './ButtonsRow';
 import EditDieFace from './EditDieFace';
 import useCallbackWithArgs from '../helpers/useCallbackWithArgs';
 import useKeyedList from '../helpers/useKeyedList';
+import { uuid2string } from '../helpers/uuid';
 import styles from '../styles';
 import { useCallback, useEffect } from 'react';
 import { Button, ScrollView } from 'react-native';
@@ -45,7 +46,7 @@ const EditDieModal: FC<EditDieProps | NewDieProps> = ({
         <EditDieFace
           deleteFace={deleteFace}
           faceKey={face.key}
-          key={face.key}
+          key={uuid2string(face.key)}
           updateFace={updateFace}
           value={face.value.toString()}
         />
